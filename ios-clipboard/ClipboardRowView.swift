@@ -1,0 +1,134 @@
+//
+//  ClipboardRowView.swift
+//  ios-clipboard
+//
+
+import SwiftUI
+
+struct ClipboardRowView: View {
+    let item: ClipboardItem
+    let onCopy: (String) -> Void
+
+    @Environment(AppSettings.self) private var settings
+    @Environment(ClipboardStore.self) private var store
+    @State private var copied = false
+    @State private var showingEditCategory = false
+
+    var body: some View {
+        HStack(spacing: 10) {
+            // カテゴリラベル
+            if !item.category.isEmpty {
+                Text(String(item.category.prefix(4)))
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .fixedSize()
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 3)
+                    .background(Color.indigo, in: RoundedRectangle(cornerRadius: 4))
+                    .frame(minWidth: 46)
+                    .frame(height: 22)
+            } else {
+                Spacer().frame(width: 46)
+            }
+
+            // コピー内容（テキストボックス風）
+            Text(item.content)
+                .font(.subheadline)
+                .foregroundStyle(.primary)
+                .lineLimit(1)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 6)
+                .background(Color(.systemGray5))
+                .clipShape(RoundedRectangle(cornerRadius: 6))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(Color(.systemGray3), lineWidth: 0.33)
+                )
+
+            // コピーボタン
+            Button {
+                UIPasteboard.general.string = item.content
+                onCopy(item.content)
+                withAnimation(.spring(duration: 0.2)) { copied = true }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    withAnimation { copied = false }
+                }
+            } label: {
+                HStack(spacing: 3) {
+                    if copied {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 10, weight: .bold))
+                    }
+                    Text(copied ? settings.language.t("Done", "済") : settings.language.t("Copy", "コピー"))
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                }
+                .foregroundStyle(.white)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(copied ? Color.orange : Color.teal,
+                            in: RoundedRectangle(cornerRadius: 6))
+                .animation(.spring(duration: 0.2), value: copied)
+            }
+            .buttonStyle(.plain)
+
+
+        }
+        .padding(.vertical, 0)
+        .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+        .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
+        .contextMenu {
+            Button {
+                store.moveToTop(item: item)
+            } label: {
+                Label(
+                    settings.language.t("Move to Top", "先頭に移動"),
+                    systemImage: "arrow.up.to.line"
+                )
+            }
+
+            Button {
+                showingEditCategory = true
+            } label: {
+                Label(
+                    settings.language.t("Edit Category", "カテゴリを編集"),
+                    systemImage: "tag"
+                )
+            }
+
+            Divider()
+
+            Button(role: .destructive) {
+                store.delete(item: item)
+            } label: {
+                Label(
+                    settings.language.t("Delete", "削除"),
+                    systemImage: "trash"
+                )
+            }
+        }
+        .sheet(isPresented: $showingEditCategory) {
+            EditCategoryView(item: item)
+                .environment(store)
+                .environment(settings)
+        }
+    }
+}
+
+#Preview {
+    List {
+        ClipboardRowView(
+            item: ClipboardItem(category: "URL", content: "https://example.com/api/v1/users"),
+            onCopy: { _ in }
+        )
+        ClipboardRowView(
+            item: ClipboardItem(category: "SQL", content: "SELECT * FROM users WHERE active = 1;"),
+            onCopy: { _ in }
+        )
+    }
+    .environment(ClipboardStore())
+    .environment(AppSettings())
+}
