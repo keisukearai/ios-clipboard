@@ -27,7 +27,12 @@ class PurchaseManager {
         isPro = UserDefaults.standard.bool(forKey: Self.proKey)
     }
 
-    /// 起動時に購入状態を復元する
+    /// 起動時にローカルキャッシュから購入状態を確認する（サインイン不要）
+    func checkStatus() async {
+        await refreshStatus()
+    }
+
+    /// ユーザーが明示的に「購入を復元」を押したときだけ呼ぶ（Apple IDサインインが発生する）
     func restorePurchases() async {
         do {
             try await AppStore.sync()

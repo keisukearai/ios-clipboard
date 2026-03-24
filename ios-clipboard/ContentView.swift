@@ -84,7 +84,7 @@ struct ContentView: View {
         } message: {
             Text(purchaseManager.purchaseError ?? "")
         }
-        .task { await purchaseManager.restorePurchases() }
+        .task { await purchaseManager.checkStatus() }
         .preferredColorScheme(settings.colorScheme)
         .environment(store)
         .environment(settings)
@@ -107,6 +107,11 @@ struct ContentView: View {
                             lang.t("Upgrade to Pro ✦", "Proにアップグレード ✦"),
                             systemImage: "star"
                         )
+                    }
+                    Button {
+                        Task { await purchaseManager.restorePurchases() }
+                    } label: {
+                        Label(lang.t("Restore Purchase", "購入を復元"), systemImage: "arrow.clockwise")
                     }
                 }
                 Divider()
