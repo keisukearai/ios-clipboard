@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var showingHelp = false
     @State private var showingResetConfirm = false
     @State private var showingPaywall = false
+    @State private var showingPurchaseError = false
     @State private var copiedText: String? = nil
 
     private static let freeLimit = 3
@@ -59,7 +60,12 @@ struct ContentView: View {
             isPresented: $showingPaywall
         ) {
             Button(lang.t("Upgrade", "アップグレード")) {
-                Task { try? await purchaseManager.purchase() }
+                Task {
+                    await purchaseManager.purchase()
+                    if purchaseManager.purchaseError != nil {
+                        showingPurchaseError = true
+                    }
+                }
             }
             Button(lang.t("Cancel", "キャンセル"), role: .cancel) {}
         } message: {
@@ -67,6 +73,16 @@ struct ContentView: View {
                 "Free plan allows up to \(Self.freeLimit) items. Upgrade to Pro for unlimited storage.",
                 "無料プランは\(Self.freeLimit)件まで保存できます。Proにアップグレードすると無制限に保存できます。"
             ))
+        }
+        .alert(
+            lang.t("Purchase Unavailable", "購入できませんでした"),
+            isPresented: $showingPurchaseError
+        ) {
+            Button(lang.t("OK", "OK"), role: .cancel) {
+                purchaseManager.purchaseError = nil
+            }
+        } message: {
+            Text(purchaseManager.purchaseError ?? "")
         }
         .task { await purchaseManager.restorePurchases() }
         .preferredColorScheme(settings.colorScheme)
@@ -84,10 +100,14 @@ struct ContentView: View {
                 if purchaseManager.isPro {
                     Label(lang.t("Pro (Unlimited)", "Pro（無制限）"), systemImage: "star.fill")
                 } else {
-                    Label(
-                        lang.t("Free · \(store.totalCount)/\(Self.freeLimit) items", "無料 · \(store.totalCount)/\(Self.freeLimit)件"),
-                        systemImage: "star"
-                    )
+                    Button {
+                        showingPaywall = true
+                    } label: {
+                        Label(
+                            lang.t("Upgrade to Pro ✦", "Proにアップグレード ✦"),
+                            systemImage: "star"
+                        )
+                    }
                 }
                 Divider()
                 Button {

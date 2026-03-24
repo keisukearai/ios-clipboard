@@ -17,6 +17,12 @@ class PurchaseManager {
         didSet { UserDefaults.standard.set(isPro, forKey: Self.proKey) }
     }
 
+    /// 購入中フラグ
+    var isPurchasing: Bool = false
+
+    /// 購入エラーメッセージ（nilのときはエラーなし）
+    var purchaseError: String? = nil
+
     init() {
         isPro = UserDefaults.standard.bool(forKey: Self.proKey)
     }
@@ -32,13 +38,34 @@ class PurchaseManager {
     }
 
     /// 購入処理
-    func purchase() async throws {
-        let products = try await Product.products(for: [Self.productID])
-        guard let product = products.first else { return }
-        let result = try await product.purchase()
-        if case .success(let verification) = result,
-           case .verified = verification {
-            isPro = true
+    func purchase() async {
+        isPurchasing = true
+        purchaseError = nil
+        defer { isPurchasing = false }
+
+        do {
+            let products = try await Product.products(for: [Self.productID])
+            guard let product = products.first else {
+                purchaseError = "Purchase is temporarily unavailable. Please try again later."
+                return
+            }
+            let result = try await product.purchase()
+            switch result {
+            case .success(let verification):
+                if case .verified = verification {
+                    isPro = true
+                } else {
+                    purchaseError = "Purchase verification failed. Please contact support."
+                }
+            case .userCancelled:
+                break
+            case .pending:
+                purchaseError = "Purchase is pending approval."
+            @unknown default:
+                break
+            }
+        } catch {
+            purchaseError = "Purchase failed: \(error.localizedDescription)"
         }
     }
 
