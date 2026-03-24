@@ -8,8 +8,7 @@ import SwiftUI
 
 @Observable
 class PurchaseManager {
-    // TODO: App Store Connect で登録した製品IDに変更してください
-    static let productID = "com.example.ios_clipboard.pro"
+    static let productID = "clipboard.pro"
 
     private static let proKey = "is_pro"
 
