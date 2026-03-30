@@ -10,8 +10,8 @@ enum SortOrder: CaseIterable {
 
     func label(_ lang: AppLanguage) -> String {
         switch self {
-        case .registration: return lang.t("Date", "登録順")
-        case .category:     return lang.t("Category", "カテゴリ順")
+        case .registration: return lang.s(.sortByDate)
+        case .category:     return lang.s(.sortByCategory)
         }
     }
 }

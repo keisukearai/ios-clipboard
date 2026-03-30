@@ -15,36 +15,36 @@ struct HelpView: View {
         NavigationStack {
             List {
                 // 通常操作
-                Section(lang.t("Actions", "操作")) {
+                Section(lang.s(.actions)) {
                     HelpRow(icon: "hand.tap", color: .teal,
-                            title: lang.t("Copy Button", "コピーボタン"),
-                            desc: lang.t("Copy content to clipboard", "内容をクリップボードにコピー"))
+                            title: lang.s(.copyButton),
+                            desc: lang.s(.copyButtonDesc))
                     HelpRow(icon: "arrow.uturn.backward", color: .gray,
-                            title: lang.t("Undo", "↩ ボタン"),
-                            desc: lang.t("Undo the last action", "直前の操作を元に戻す"))
+                            title: lang.s(.undo),
+                            desc: lang.s(.undoDesc))
                     HelpRow(icon: "plus", color: .gray,
-                            title: lang.t("New Item", "新規追加"),
-                            desc: lang.t("Add a new clipboard item", "新しいアイテムを追加"))
+                            title: lang.s(.newItem),
+                            desc: lang.s(.newItemDesc))
                 }
 
                 // 長押し操作
-                Section(lang.t("Long Press on Row", "行を長押し")) {
+                Section(lang.s(.longPress)) {
                     HelpRow(icon: "arrow.up.to.line", color: .blue,
-                            title: lang.t("Move to Top", "先頭に移動"),
-                            desc: lang.t("Move item to top of list", "一覧の先頭へ移動"))
+                            title: lang.s(.moveToTop),
+                            desc: lang.s(.moveToTopDesc))
                     HelpRow(icon: "tag", color: .purple,
-                            title: lang.t("Edit Category", "カテゴリを編集"),
-                            desc: lang.t("Change the item's category", "カテゴリを変更"))
+                            title: lang.s(.editCategory),
+                            desc: lang.s(.editCategoryDesc))
                     HelpRow(icon: "trash", color: .red,
-                            title: lang.t("Delete", "削除"),
-                            desc: lang.t("Delete item from list", "一覧から削除"))
+                            title: lang.s(.delete),
+                            desc: lang.s(.deleteDesc))
                 }
             }
-            .navigationTitle(lang.t("How to Use", "使い方"))
+            .navigationTitle(lang.s(.howToUse))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(lang.t("Close", "閉じる")) { dismiss() }
+                    Button(lang.s(.close)) { dismiss() }
                 }
             }
         }

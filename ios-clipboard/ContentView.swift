@@ -38,16 +38,16 @@ struct ContentView: View {
             }
         }
         .confirmationDialog(
-            lang.t("Reset all data?", "初期化しますか？"),
+            lang.s(.resetAllData),
             isPresented: $showingResetConfirm,
             titleVisibility: .visible
         ) {
-            Button(lang.t("Reset", "初期化"), role: .destructive) {
+            Button(lang.s(.reset), role: .destructive) {
                 store.reset()
             }
-            Button(lang.t("Cancel", "キャンセル"), role: .cancel) {}
+            Button(lang.s(.cancel), role: .cancel) {}
         } message: {
-            Text(lang.t("All items except the initial record will be deleted.", "初期レコード以外のデータをすべて削除します。"))
+            Text(lang.s(.resetConfirmMessage))
         }
         .sheet(isPresented: $showingHelp) {
             HelpView().environment(settings)
@@ -71,10 +71,10 @@ struct ContentView: View {
             .presentationDragIndicator(.visible)
         }
         .alert(
-            lang.t("Purchase Unavailable", "購入できませんでした"),
+            lang.s(.purchaseUnavailable),
             isPresented: $showingPurchaseError
         ) {
-            Button(lang.t("OK", "OK"), role: .cancel) {
+            Button(lang.s(.ok), role: .cancel) {
                 purchaseManager.purchaseError = nil
             }
         } message: {
@@ -94,27 +94,24 @@ struct ContentView: View {
             Menu {
                 // 購入状態
                 if purchaseManager.isPro {
-                    Label(lang.t("Pro (Unlimited)", "Pro（無制限）"), systemImage: "star.fill")
+                    Label(lang.s(.proUnlimited), systemImage: "star.fill")
                 } else {
                     Button {
                         showingPaywall = true
                     } label: {
-                        Label(
-                            lang.t("Upgrade to Pro ✦", "Proにアップグレード ✦"),
-                            systemImage: "star"
-                        )
+                        Label(lang.s(.upgradeToPro) + " ✦", systemImage: "star")
                     }
                     Button {
                         Task { await purchaseManager.restorePurchases() }
                     } label: {
-                        Label(lang.t("Restore Purchase", "購入を復元"), systemImage: "arrow.clockwise")
+                        Label(lang.s(.restorePurchase), systemImage: "arrow.clockwise")
                     }
                 }
                 Divider()
                 Button {
                     showingHelp = true
                 } label: {
-                    Label(lang.t("How to Use", "使い方"), systemImage: "questionmark.circle")
+                    Label(lang.s(.howToUse), systemImage: "questionmark.circle")
                 }
                 Divider()
                 Button {
@@ -122,23 +119,30 @@ struct ContentView: View {
                 } label: {
                     let isDark = settings.colorScheme == .dark
                     Label(
-                        isDark ? lang.t("Light Mode", "ライトモード") : lang.t("Dark Mode", "ダークモード"),
+                        isDark ? lang.s(.lightMode) : lang.s(.darkMode),
                         systemImage: isDark ? "sun.max" : "moon"
                     )
                 }
-                Button {
-                    settings.language = lang == .english ? .japanese : .english
+                Menu {
+                    ForEach(AppLanguage.allCases, id: \.self) { l in
+                        Button {
+                            settings.language = l
+                        } label: {
+                            if l == lang {
+                                Label(l.displayName, systemImage: "checkmark")
+                            } else {
+                                Text(l.displayName)
+                            }
+                        }
+                    }
                 } label: {
-                    Label(
-                        lang == .english ? "日本語に切り替え" : "Switch to English",
-                        systemImage: "globe"
-                    )
+                    Label(lang.s(.language), systemImage: "globe")
                 }
                 Divider()
                 Button(role: .destructive) {
                     showingResetConfirm = true
                 } label: {
-                    Label(lang.t("Reset", "初期化"), systemImage: "arrow.counterclockwise")
+                    Label(lang.s(.reset), systemImage: "arrow.counterclockwise")
                 }
             } label: {
                 Image(systemName: "gearshape")
@@ -178,12 +182,12 @@ private struct FilterSortMenu: View {
 
     var body: some View {
         Menu {
-            Section(lang.t("Filter", "フィルター")) {
+            Section(lang.s(.filter)) {
                 Button {
                     store.filterCategory = nil
                 } label: {
                     HStack {
-                        Text(lang.t("All", "すべて"))
+                        Text(lang.s(.all))
                         if store.filterCategory == nil { Image(systemName: "checkmark") }
                     }
                 }
@@ -193,13 +197,13 @@ private struct FilterSortMenu: View {
                     } label: {
                         HStack {
                             Text(cat == ClipboardStore.uncategorized
-                                 ? lang.t("No Category", "未設定") : cat)
+                                 ? lang.s(.noCategory) : cat)
                             if store.filterCategory == cat { Image(systemName: "checkmark") }
                         }
                     }
                 }
             }
-            Section(lang.t("Sort", "並び替え")) {
+            Section(lang.s(.sort)) {
                 ForEach(SortOrder.allCases, id: \.self) { order in
                     Button {
                         store.sortOrder = order
@@ -230,10 +234,10 @@ private struct CopiedFooterView: View {
         VStack(spacing: 0) {
             Divider()
             VStack(alignment: .leading, spacing: 4) {
-                Text(lang.t("Copied", "コピー中の内容"))
+                Text(lang.s(.copiedHeader))
                     .font(.caption2)
                     .foregroundStyle(.secondary)
-                Text(copiedText ?? lang.t("(none)", "（未コピー）"))
+                Text(copiedText ?? lang.s(.noneValue))
                     .font(.caption)
                     .foregroundStyle(copiedText == nil ? .tertiary : .primary)
                     .lineLimit(1)
@@ -260,15 +264,12 @@ private struct PaywallSheet: View {
             Image(systemName: "star.circle.fill")
                 .font(.system(size: 56))
                 .foregroundStyle(.yellow)
-            Text(lang.t("Upgrade to Pro", "Proにアップグレード"))
+            Text(lang.s(.upgradeToPro))
                 .font(.title2.bold())
-            Text(lang.t(
-                "Free plan allows up to \(freeLimit) items. Upgrade to Pro for unlimited storage.",
-                "無料プランは\(freeLimit)件まで保存できます。Proにアップグレードすると無制限に保存できます。"
-            ))
-            .multilineTextAlignment(.center)
-            .foregroundStyle(.secondary)
-            .padding(.horizontal, 32)
+            Text(lang.s(.freeLimitMessage(freeLimit)))
+                .multilineTextAlignment(.center)
+                .foregroundStyle(.secondary)
+                .padding(.horizontal, 32)
             Spacer()
             VStack(spacing: 12) {
                 Button {
@@ -283,10 +284,10 @@ private struct PaywallSheet: View {
                                 .tint(.white)
                         } else {
                             VStack(spacing: 2) {
-                                Text(lang.t("Upgrade to Pro", "Proにアップグレード"))
+                                Text(lang.s(.upgradeToPro))
                                     .bold()
                                 if let price = purchaseManager.localizedPrice {
-                                    Text(lang.t("\(price) one-time purchase", "\(price) 買い切り"))
+                                    Text(lang.s(.priceOneTime(price)))
                                         .font(.caption)
                                         .opacity(0.85)
                                 }
@@ -302,7 +303,7 @@ private struct PaywallSheet: View {
                 .disabled(purchaseManager.isPurchasing)
                 .padding(.horizontal, 32)
 
-                Button(lang.t("Cancel", "キャンセル"), role: .cancel) {
+                Button(lang.s(.cancel), role: .cancel) {
                     onDismiss()
                 }
                 .foregroundStyle(.secondary)

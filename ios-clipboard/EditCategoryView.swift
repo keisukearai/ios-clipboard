@@ -28,8 +28,8 @@ struct EditCategoryView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(lang.t("Category", "カテゴリ")) {
-                    TextField(lang.t("e.g. URL, SQL, Email", "例: URL、SQL、メールアドレス"), text: $category)
+                Section(lang.s(.category)) {
+                    TextField(lang.s(.categoryPlaceholder), text: $category)
 
                     if !existingCategories.isEmpty {
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -57,14 +57,14 @@ struct EditCategoryView: View {
                     }
                 }
             }
-            .navigationTitle(lang.t("Edit Category", "カテゴリを編集"))
+            .navigationTitle(lang.s(.editCategory))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(lang.t("Cancel", "キャンセル")) { dismiss() }
+                    Button(lang.s(.cancel)) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(lang.t("Save", "保存")) {
+                    Button(lang.s(.save)) {
                         store.updateCategory(item: item, category: category)
                         dismiss()
                     }

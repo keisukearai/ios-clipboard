@@ -22,8 +22,8 @@ struct AddItemView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(lang.t("Category (optional)", "カテゴリ（任意）")) {
-                    TextField(lang.t("e.g. URL, SQL, Email", "例: URL、SQL、メールアドレス"), text: $category)
+                Section(lang.s(.categoryOptional)) {
+                    TextField(lang.s(.categoryPlaceholder), text: $category)
 
                     if !existingCategories.isEmpty {
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -51,19 +51,19 @@ struct AddItemView: View {
                     }
                 }
 
-                Section(lang.t("Content", "コピーする内容")) {
-                    TextField(lang.t("e.g. https://example.com", "例: https://example.com"), text: $content, axis: .vertical)
+                Section(lang.s(.content)) {
+                    TextField(lang.s(.contentPlaceholder), text: $content, axis: .vertical)
                         .lineLimit(3...6)
                 }
             }
-            .navigationTitle(lang.t("New Item", "新規追加"))
+            .navigationTitle(lang.s(.newItem))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(lang.t("Cancel", "キャンセル")) { dismiss() }
+                    Button(lang.s(.cancel)) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(lang.t("Add", "追加")) {
+                    Button(lang.s(.add)) {
                         store.add(category: category, content: content)
                         dismiss()
                     }
