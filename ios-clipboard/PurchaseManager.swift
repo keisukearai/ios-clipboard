@@ -22,6 +22,9 @@ class PurchaseManager {
     /// 購入エラーメッセージ（nilのときはエラーなし）
     var purchaseError: String? = nil
 
+    /// StoreKit から取得したローカライズ済み価格文字列（例: "¥120"）
+    var localizedPrice: String? = nil
+
     init() {
         isPro = UserDefaults.standard.bool(forKey: Self.proKey)
     }
@@ -29,6 +32,7 @@ class PurchaseManager {
     /// 起動時にローカルキャッシュから購入状態を確認する（サインイン不要）
     func checkStatus() async {
         await refreshStatus()
+        await fetchProduct()
     }
 
     /// ユーザーが明示的に「購入を復元」を押したときだけ呼ぶ（Apple IDサインインが発生する）
@@ -53,6 +57,7 @@ class PurchaseManager {
                 purchaseError = "Purchase is temporarily unavailable. Please try again later."
                 return
             }
+            localizedPrice = product.displayPrice
             let result = try await product.purchase()
             switch result {
             case .success(let verification):
@@ -74,6 +79,11 @@ class PurchaseManager {
     }
 
     // MARK: - Private
+
+    private func fetchProduct() async {
+        guard let product = try? await Product.products(for: [Self.productID]).first else { return }
+        localizedPrice = product.displayPrice
+    }
 
     private func refreshStatus() async {
         for await result in Transaction.currentEntitlements {

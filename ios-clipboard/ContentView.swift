@@ -55,24 +55,20 @@ struct ContentView: View {
         .sheet(isPresented: $showingAddSheet) {
             AddItemView().environment(store).environment(settings)
         }
-        .alert(
-            lang.t("Upgrade to Pro", "Proにアップグレード"),
-            isPresented: $showingPaywall
-        ) {
-            Button(lang.t("Upgrade", "アップグレード")) {
-                Task {
-                    await purchaseManager.purchase()
+        .sheet(isPresented: $showingPaywall) {
+            PaywallSheet(
+                freeLimit: Self.freeLimit,
+                lang: lang,
+                purchaseManager: purchaseManager,
+                onDismiss: {
+                    showingPaywall = false
                     if purchaseManager.purchaseError != nil {
                         showingPurchaseError = true
                     }
                 }
-            }
-            Button(lang.t("Cancel", "キャンセル"), role: .cancel) {}
-        } message: {
-            Text(lang.t(
-                "Free plan allows up to \(Self.freeLimit) items. Upgrade to Pro for unlimited storage.",
-                "無料プランは\(Self.freeLimit)件まで保存できます。Proにアップグレードすると無制限に保存できます。"
-            ))
+            )
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
         }
         .alert(
             lang.t("Purchase Unavailable", "購入できませんでした"),
@@ -246,6 +242,72 @@ private struct CopiedFooterView: View {
             .padding(.horizontal, 16)
             .padding(.vertical, 6)
             .background(Color(.systemGray6))
+        }
+    }
+}
+
+// MARK: - Paywall Sheet
+
+private struct PaywallSheet: View {
+    let freeLimit: Int
+    let lang: AppLanguage
+    let purchaseManager: PurchaseManager
+    let onDismiss: () -> Void
+
+    var body: some View {
+        VStack(spacing: 24) {
+            Spacer()
+            Image(systemName: "star.circle.fill")
+                .font(.system(size: 56))
+                .foregroundStyle(.yellow)
+            Text(lang.t("Upgrade to Pro", "Proにアップグレード"))
+                .font(.title2.bold())
+            Text(lang.t(
+                "Free plan allows up to \(freeLimit) items. Upgrade to Pro for unlimited storage.",
+                "無料プランは\(freeLimit)件まで保存できます。Proにアップグレードすると無制限に保存できます。"
+            ))
+            .multilineTextAlignment(.center)
+            .foregroundStyle(.secondary)
+            .padding(.horizontal, 32)
+            Spacer()
+            VStack(spacing: 12) {
+                Button {
+                    Task {
+                        await purchaseManager.purchase()
+                        onDismiss()
+                    }
+                } label: {
+                    Group {
+                        if purchaseManager.isPurchasing {
+                            ProgressView()
+                                .tint(.white)
+                        } else {
+                            VStack(spacing: 2) {
+                                Text(lang.t("Upgrade to Pro", "Proにアップグレード"))
+                                    .bold()
+                                if let price = purchaseManager.localizedPrice {
+                                    Text(lang.t("\(price) one-time purchase", "\(price) 買い切り"))
+                                        .font(.caption)
+                                        .opacity(0.85)
+                                }
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.accentColor)
+                    .foregroundStyle(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                }
+                .disabled(purchaseManager.isPurchasing)
+                .padding(.horizontal, 32)
+
+                Button(lang.t("Cancel", "キャンセル"), role: .cancel) {
+                    onDismiss()
+                }
+                .foregroundStyle(.secondary)
+            }
+            .padding(.bottom, 32)
         }
     }
 }

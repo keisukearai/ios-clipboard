@@ -34,7 +34,7 @@ class ClipboardStore {
             _items = [
                 ClipboardItem(
                     category: "mail",
-                    content: "hoge@hoge.co.jp"
+                    content: "example@example.com"
                 ),
             ]
         }
@@ -115,7 +115,7 @@ class ClipboardStore {
     func reset() {
         saveHistory()
         _items = [
-            ClipboardItem(category: "mail", content: "hoge@hoge.co.jp")
+            ClipboardItem(category: "mail", content: "example@example.com")
         ]
     }
 
