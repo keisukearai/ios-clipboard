@@ -6,11 +6,27 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		BB0005002F6DF3DF003500E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C6B5468D2F6DF3DF003500E9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C6B546942F6DF3DF003500E9;
+			remoteInfo = "ios-clipboard";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		BB0001002F6DF3DF003500E9 /* ios-clipboardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ios-clipboardTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6B546952F6DF3DF003500E9 /* ios-clipboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ios-clipboard.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		BB0002002F6DF3DF003500E9 /* ios-clipboardTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "ios-clipboardTests";
+			sourceTree = "<group>";
+		};
 		C6B546972F6DF3DF003500E9 /* ios-clipboard */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "ios-clipboard";
@@ -19,6 +35,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		BB0003002F6DF3DF003500E9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C6B546922F6DF3DF003500E9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -33,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				C6B546972F6DF3DF003500E9 /* ios-clipboard */,
+				BB0002002F6DF3DF003500E9 /* ios-clipboardTests */,
 				C6B546962F6DF3DF003500E9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				C6B546952F6DF3DF003500E9 /* ios-clipboard.app */,
+				BB0001002F6DF3DF003500E9 /* ios-clipboardTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,6 +73,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		BB0007002F6DF3DF003500E9 /* ios-clipboardTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BB000A002F6DF3DF003500E9 /* Build configuration list for PBXNativeTarget "ios-clipboardTests" */;
+			buildPhases = (
+				BB0004002F6DF3DF003500E9 /* Sources */,
+				BB0003002F6DF3DF003500E9 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BB0006002F6DF3DF003500E9 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				BB0002002F6DF3DF003500E9 /* ios-clipboardTests */,
+			);
+			name = "ios-clipboardTests";
+			productName = "ios-clipboardTests";
+			productReference = BB0001002F6DF3DF003500E9 /* ios-clipboardTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		C6B546942F6DF3DF003500E9 /* ios-clipboard */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C6B546A02F6DF3E0003500E9 /* Build configuration list for PBXNativeTarget "ios-clipboard" */;
@@ -80,6 +125,10 @@
 				LastSwiftUpdateCheck = 2630;
 				LastUpgradeCheck = 2630;
 				TargetAttributes = {
+					BB0007002F6DF3DF003500E9 = {
+						CreatedOnToolsVersion = 26.3;
+						TestTargetID = C6B546942F6DF3DF003500E9;
+					};
 					C6B546942F6DF3DF003500E9 = {
 						CreatedOnToolsVersion = 26.3;
 					};
@@ -100,6 +149,7 @@
 			projectRoot = "";
 			targets = (
 				C6B546942F6DF3DF003500E9 /* ios-clipboard */,
+				BB0007002F6DF3DF003500E9 /* ios-clipboardTests */,
 			);
 		};
 /* End PBXProject section */
@@ -115,6 +165,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		BB0004002F6DF3DF003500E9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C6B546912F6DF3DF003500E9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -124,7 +181,72 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		BB0006002F6DF3DF003500E9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C6B546942F6DF3DF003500E9 /* ios-clipboard */;
+			targetProxy = BB0005002F6DF3DF003500E9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		BB0008002F6DF3DF003500E9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HFZSU3MJLR;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.keisukearai.ios-clipboard.Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ios-clipboard.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ios-clipboard";
+			};
+			name = Debug;
+		};
+		BB0009002F6DF3DF003500E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HFZSU3MJLR;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.keisukearai.ios-clipboard.Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ios-clipboard.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ios-clipboard";
+			};
+			name = Release;
+		};
 		C6B5469E2F6DF3E0003500E9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -327,6 +449,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		BB000A002F6DF3DF003500E9 /* Build configuration list for PBXNativeTarget "ios-clipboardTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB0008002F6DF3DF003500E9 /* Debug */,
+				BB0009002F6DF3DF003500E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C6B546902F6DF3DF003500E9 /* Build configuration list for PBXProject "ios-clipboard" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

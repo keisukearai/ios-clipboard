@@ -62,7 +62,7 @@ struct ClipboardRowView: View {
                         Image(systemName: "checkmark")
                             .font(.system(size: 10, weight: .bold))
                     }
-                    Text(copied ? settings.language.t("Done", "済") : settings.language.t("Copy", "コピー"))
+                    Text(copied ? settings.language.s(.copyDone) : settings.language.s(.copy))
                         .font(.caption)
                         .fontWeight(.semibold)
                 }
@@ -85,7 +85,7 @@ struct ClipboardRowView: View {
                 store.moveToTop(item: item)
             } label: {
                 Label(
-                    settings.language.t("Move to Top", "先頭に移動"),
+                    settings.language.s(.moveToTop),
                     systemImage: "arrow.up.to.line"
                 )
             }
@@ -94,7 +94,7 @@ struct ClipboardRowView: View {
                 showingEditCategory = true
             } label: {
                 Label(
-                    settings.language.t("Edit Category", "カテゴリを編集"),
+                    settings.language.s(.editCategory),
                     systemImage: "tag"
                 )
             }
@@ -105,7 +105,7 @@ struct ClipboardRowView: View {
                 store.delete(item: item)
             } label: {
                 Label(
-                    settings.language.t("Delete", "削除"),
+                    settings.language.s(.delete),
                     systemImage: "trash"
                 )
             }

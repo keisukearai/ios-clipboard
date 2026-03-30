@@ -14,6 +14,8 @@ enum L {
     case close
     case delete
     case add
+    case copy
+    case copyDone
 
     // MARK: Settings menu
     case reset
@@ -122,6 +124,24 @@ enum L {
             case .thai:       return "เพิ่ม"
             case .chinese:    return "添加"
             case .vietnamese: return "Thêm"
+            }
+
+        case .copy:
+            switch lang {
+            case .english:    return "Copy"
+            case .japanese:   return "コピー"
+            case .thai:       return "คัดลอก"
+            case .chinese:    return "复制"
+            case .vietnamese: return "Sao chép"
+            }
+
+        case .copyDone:
+            switch lang {
+            case .english:    return "Done"
+            case .japanese:   return "済"
+            case .thai:       return "เสร็จ"
+            case .chinese:    return "完成"
+            case .vietnamese: return "Xong"
             }
 
         case .reset:
