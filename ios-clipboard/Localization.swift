@@ -63,6 +63,7 @@ enum L {
     case copyButtonDesc
     case undo
     case undoDesc
+    case undoConfirmMessage
     case newItemDesc
     case longPress
     case moveToTop
@@ -459,6 +460,15 @@ enum L {
             case .thai:       return "เลิกทำการกระทำล่าสุด"
             case .chinese:    return "撤销上一步操作"
             case .vietnamese: return "Hoàn tác thao tác vừa rồi"
+            }
+
+        case .undoConfirmMessage:
+            switch lang {
+            case .english:    return "Revert to the previous state?"
+            case .japanese:   return "直前の状態に戻しますか？"
+            case .thai:       return "ย้อนกลับไปยังสถานะก่อนหน้า?"
+            case .chinese:    return "恢复到上一个状态？"
+            case .vietnamese: return "Hoàn tác về trạng thái trước đó?"
             }
 
         case .newItemDesc:

@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var purchaseManager = PurchaseManager()
     @State private var showingAddSheet = false
     @State private var showingHelp = false
+    @State private var showingUndoConfirm = false
     @State private var showingResetConfirm = false
     @State private var showingResetFinalConfirm = false
     @State private var showingPaywall = false
@@ -37,6 +38,18 @@ struct ContentView: View {
             .safeAreaInset(edge: .bottom) {
                 CopiedFooterView(copiedText: copiedText, lang: lang)
             }
+        }
+        .confirmationDialog(
+            lang.s(.undo),
+            isPresented: $showingUndoConfirm,
+            titleVisibility: .visible
+        ) {
+            Button(lang.s(.undo), role: .destructive) {
+                store.undo()
+            }
+            Button(lang.s(.cancel), role: .cancel) {}
+        } message: {
+            Text(lang.s(.undoConfirmMessage))
         }
         // 第1確認
         .confirmationDialog(
@@ -165,7 +178,7 @@ struct ContentView: View {
     private var trailingToolbar: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
             FilterSortMenu(store: store, lang: lang)
-            Button { store.undo() } label: {
+            Button { showingUndoConfirm = true } label: {
                 Image(systemName: "arrow.uturn.backward")
                     .tileStyle(color: .gray)
             }
