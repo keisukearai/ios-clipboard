@@ -346,7 +346,7 @@ private struct ResetFinalConfirmSheet: View {
     var body: some View {
         VStack(spacing: 20) {
             Spacer()
-            Image(systemName: "exclamationmark.triangle.fill")
+            Image(systemName: "exclamationmark.triangle")
                 .font(.system(size: 40))
                 .foregroundStyle(.orange)
             Text(lang.s(.resetAllData))
