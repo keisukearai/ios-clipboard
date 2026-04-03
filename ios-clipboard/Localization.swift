@@ -447,10 +447,10 @@ enum L {
         case .undo:
             switch lang {
             case .english:    return "Undo"
-            case .japanese:   return "↩ ボタン"
-            case .thai:       return "ปุ่ม ↩"
-            case .chinese:    return "↩ 按钮"
-            case .vietnamese: return "Nút ↩"
+            case .japanese:   return "元に戻す"
+            case .thai:       return "เลิกทำ"
+            case .chinese:    return "撤销"
+            case .vietnamese: return "Hoàn tác"
             }
 
         case .undoDesc:
