@@ -51,17 +51,13 @@ struct ContentView: View {
         } message: {
             Text(lang.s(.resetConfirmMessage))
         }
-        // 第2確認（二重チェック）
-        .alert(
-            lang.s(.resetAllData),
-            isPresented: $showingResetFinalConfirm
-        ) {
-            Button(lang.s(.cancel), role: .cancel) {}
-            Button(lang.s(.reset), role: .destructive) {
+        // 第2確認（カスタムシート：初期化ボタンを小さく目立たなくする）
+        .sheet(isPresented: $showingResetFinalConfirm) {
+            ResetFinalConfirmSheet(lang: lang) {
                 store.reset()
             }
-        } message: {
-            Text(lang.s(.resetFinalConfirmMessage))
+            .presentationDetents([.height(260)])
+            .presentationDragIndicator(.visible)
         }
         .sheet(isPresented: $showingHelp) {
             HelpView().environment(settings)
@@ -323,6 +319,50 @@ private struct PaywallSheet: View {
                 .foregroundStyle(.secondary)
             }
             .padding(.bottom, 32)
+        }
+    }
+}
+
+// MARK: - Reset Final Confirm Sheet
+
+private struct ResetFinalConfirmSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    let lang: AppLanguage
+    let onConfirm: () -> Void
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Spacer()
+            Image(systemName: "exclamationmark.triangle.fill")
+                .font(.system(size: 40))
+                .foregroundStyle(.orange)
+            Text(lang.s(.resetAllData))
+                .font(.headline)
+            Text(lang.s(.resetFinalConfirmMessage))
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 32)
+            Spacer()
+            // キャンセルを大きく・目立つボタンにする
+            Button(lang.s(.cancel)) {
+                dismiss()
+            }
+            .font(.body.bold())
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color.accentColor)
+            .foregroundStyle(.white)
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .padding(.horizontal, 32)
+            // 初期化は小さく・目立たないリンク風ボタン
+            Button(lang.s(.reset)) {
+                onConfirm()
+                dismiss()
+            }
+            .font(.footnote)
+            .foregroundStyle(.red.opacity(0.6))
+            .padding(.bottom, 24)
         }
     }
 }
