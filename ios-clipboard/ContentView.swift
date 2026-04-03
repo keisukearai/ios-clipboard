@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var showingAddSheet = false
     @State private var showingHelp = false
     @State private var showingResetConfirm = false
+    @State private var showingResetFinalConfirm = false
     @State private var showingPaywall = false
     @State private var showingPurchaseError = false
     @State private var copiedText: String? = nil
@@ -37,17 +38,30 @@ struct ContentView: View {
                 CopiedFooterView(copiedText: copiedText, lang: lang)
             }
         }
+        // 第1確認
         .confirmationDialog(
             lang.s(.resetAllData),
             isPresented: $showingResetConfirm,
             titleVisibility: .visible
         ) {
             Button(lang.s(.reset), role: .destructive) {
-                store.reset()
+                showingResetFinalConfirm = true
             }
             Button(lang.s(.cancel), role: .cancel) {}
         } message: {
             Text(lang.s(.resetConfirmMessage))
+        }
+        // 第2確認（二重チェック）
+        .alert(
+            lang.s(.resetAllData),
+            isPresented: $showingResetFinalConfirm
+        ) {
+            Button(lang.s(.cancel), role: .cancel) {}
+            Button(lang.s(.reset), role: .destructive) {
+                store.reset()
+            }
+        } message: {
+            Text(lang.s(.resetFinalConfirmMessage))
         }
         .sheet(isPresented: $showingHelp) {
             HelpView().environment(settings)

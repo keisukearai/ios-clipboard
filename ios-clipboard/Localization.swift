@@ -21,6 +21,7 @@ enum L {
     case reset
     case resetAllData
     case resetConfirmMessage
+    case resetFinalConfirmMessage
     case proUnlimited
     case upgradeToPro
     case restorePurchase
@@ -170,6 +171,15 @@ enum L {
             case .thai:       return "รายการทั้งหมดยกเว้นบันทึกเริ่มต้นจะถูกลบ"
             case .chinese:    return "除初始记录外的所有项目将被删除。"
             case .vietnamese: return "Tất cả mục trừ bản ghi ban đầu sẽ bị xóa."
+            }
+
+        case .resetFinalConfirmMessage:
+            switch lang {
+            case .english:    return "This cannot be undone. Are you absolutely sure?"
+            case .japanese:   return "この操作は元に戻せません。本当によろしいですか？"
+            case .thai:       return "การดำเนินการนี้ไม่สามารถยกเลิกได้ คุณแน่ใจหรือไม่?"
+            case .chinese:    return "此操作无法撤销。您确定要继续吗？"
+            case .vietnamese: return "Thao tác này không thể hoàn tác. Bạn có chắc chắn không?"
             }
 
         case .proUnlimited:
