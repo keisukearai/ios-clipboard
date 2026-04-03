@@ -38,10 +38,10 @@ struct ClipboardRowView: View {
             }
 
             // コピー内容（テキストボックス風）
-            Text(item.content)
+            // 改行をスペースに置換してリスト上で1行プレビュー表示する
+            Text(item.content.replacingOccurrences(of: "\n", with: " "))
                 .font(.subheadline)
                 .foregroundStyle(.primary)
-                // iPad では2行表示でより多くの内容を確認できるようにする
                 .lineLimit(isRegularWidth ? 2 : 1)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 8)
