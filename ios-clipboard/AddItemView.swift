@@ -52,8 +52,19 @@ struct AddItemView: View {
                 }
 
                 Section(lang.s(.content)) {
-                    TextField(lang.s(.contentPlaceholder), text: $content, axis: .vertical)
-                        .lineLimit(3...6)
+                    // TextField(axis: .vertical) + lineLimit(range) は日本語 IME 変換中に
+                    // ビュー再描画が走り変換候補が消えるため TextEditor に変更
+                    ZStack(alignment: .topLeading) {
+                        TextEditor(text: $content)
+                            .frame(minHeight: 80, maxHeight: 144)
+                        if content.isEmpty {
+                            Text(lang.s(.contentPlaceholder))
+                                .foregroundStyle(Color(.placeholderText))
+                                .padding(.top, 8)
+                                .padding(.leading, 4)
+                                .allowsHitTesting(false)
+                        }
+                    }
                 }
             }
             .navigationTitle(lang.s(.newItem))
