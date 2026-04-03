@@ -13,10 +13,12 @@ struct EditCategoryView: View {
     let item: ClipboardItem
 
     @State private var category: String
+    @State private var content: String
 
     init(item: ClipboardItem) {
         self.item = item
         _category = State(initialValue: item.category)
+        _content = State(initialValue: item.content)
     }
 
     private var lang: AppLanguage { settings.language }
@@ -56,8 +58,22 @@ struct EditCategoryView: View {
                         }
                     }
                 }
+
+                Section(lang.s(.content)) {
+                    ZStack(alignment: .topLeading) {
+                        TextEditor(text: $content)
+                            .frame(minHeight: 80, maxHeight: 144)
+                        if content.isEmpty {
+                            Text(lang.s(.contentPlaceholder))
+                                .foregroundStyle(Color(.placeholderText))
+                                .padding(.top, 8)
+                                .padding(.leading, 4)
+                                .allowsHitTesting(false)
+                        }
+                    }
+                }
             }
-            .navigationTitle(lang.s(.editCategory))
+            .navigationTitle(lang.s(.editItem))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -65,9 +81,10 @@ struct EditCategoryView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(lang.s(.save)) {
-                        store.updateCategory(item: item, category: category)
+                        store.updateItem(item: item, category: category, content: content)
                         dismiss()
                     }
+                    .disabled(content.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }
         }

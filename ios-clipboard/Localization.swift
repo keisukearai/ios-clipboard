@@ -54,6 +54,7 @@ enum L {
     case contentPlaceholder
     case category
     case editCategory
+    case editItem
 
     // MARK: Help
     case actions
@@ -394,6 +395,15 @@ enum L {
             case .thai:       return "แก้ไขหมวดหมู่"
             case .chinese:    return "编辑分类"
             case .vietnamese: return "Chỉnh sửa danh mục"
+            }
+
+        case .editItem:
+            switch lang {
+            case .english:    return "Edit"
+            case .japanese:   return "編集"
+            case .thai:       return "แก้ไข"
+            case .chinese:    return "编辑"
+            case .vietnamese: return "Chỉnh sửa"
             }
 
         case .actions:

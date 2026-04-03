@@ -112,6 +112,14 @@ class ClipboardStore {
         }
     }
 
+    func updateItem(item: ClipboardItem, category: String, content: String) {
+        saveHistory()
+        if let i = _items.firstIndex(where: { $0.id == item.id }) {
+            _items[i].category = category
+            _items[i].content = content
+        }
+    }
+
     func reset() {
         saveHistory()
         _items = [

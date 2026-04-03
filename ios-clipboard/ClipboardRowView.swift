@@ -99,8 +99,8 @@ struct ClipboardRowView: View {
                 showingEditCategory = true
             } label: {
                 Label(
-                    settings.language.s(.editCategory),
-                    systemImage: "tag"
+                    settings.language.s(.editItem),
+                    systemImage: "pencil"
                 )
             }
 
