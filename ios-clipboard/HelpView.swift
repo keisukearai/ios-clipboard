@@ -19,7 +19,7 @@ struct HelpView: View {
                     HelpRow(icon: "hand.tap", color: .teal,
                             title: lang.s(.copyButton),
                             desc: lang.s(.copyButtonDesc))
-                    HelpRow(icon: "arrow.uturn.backward", color: .gray,
+                    HelpRow(icon: "arrow.counterclockwise", color: .gray,
                             title: lang.s(.undo),
                             desc: lang.s(.undoDesc))
                     HelpRow(icon: "plus", color: .gray,

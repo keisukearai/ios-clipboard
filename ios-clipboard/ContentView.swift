@@ -179,7 +179,7 @@ struct ContentView: View {
         ToolbarItemGroup(placement: .topBarTrailing) {
             FilterSortMenu(store: store, lang: lang)
             Button { showingUndoConfirm = true } label: {
-                Image(systemName: "arrow.uturn.backward")
+                Image(systemName: "arrow.counterclockwise")
                     .tileStyle(color: .gray)
             }
             .disabled(!store.canUndo)
