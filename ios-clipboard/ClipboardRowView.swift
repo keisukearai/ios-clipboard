@@ -11,14 +11,18 @@ struct ClipboardRowView: View {
 
     @Environment(AppSettings.self) private var settings
     @Environment(ClipboardStore.self) private var store
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @State private var copied = false
     @State private var showingEditCategory = false
+
+    private var isRegularWidth: Bool { horizontalSizeClass == .regular }
 
     var body: some View {
         HStack(spacing: 10) {
             // カテゴリラベル
             if !item.category.isEmpty {
-                Text(String(item.category.prefix(4)))
+                // iPad (regular) では最大8文字、iPhone (compact) では最大4文字
+                Text(String(item.category.prefix(isRegularWidth ? 8 : 4)))
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundStyle(.white)
@@ -28,7 +32,7 @@ struct ClipboardRowView: View {
                     .padding(.vertical, 3)
                     .background(Color.indigo, in: RoundedRectangle(cornerRadius: 4))
                     .frame(minWidth: 46)
-                    .frame(height: 22)
+                    // 固定高さを廃止: Dynamic Type 使用時にテキストが縦方向にクリップされるのを防ぐ
             } else {
                 Spacer().frame(width: 46)
             }
@@ -37,7 +41,8 @@ struct ClipboardRowView: View {
             Text(item.content)
                 .font(.subheadline)
                 .foregroundStyle(.primary)
-                .lineLimit(1)
+                // iPad では2行表示でより多くの内容を確認できるようにする
+                .lineLimit(isRegularWidth ? 2 : 1)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 6)

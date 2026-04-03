@@ -240,7 +240,7 @@ private struct CopiedFooterView: View {
                 Text(copiedText ?? lang.s(.noneValue))
                     .font(.caption)
                     .foregroundStyle(copiedText == nil ? .tertiary : .primary)
-                    .lineLimit(1)
+                    .lineLimit(2)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.horizontal, 16)
