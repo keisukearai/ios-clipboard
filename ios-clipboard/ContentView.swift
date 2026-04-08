@@ -69,7 +69,7 @@ struct ContentView: View {
             ResetFinalConfirmSheet(lang: lang) {
                 store.reset()
             }
-            .presentationDetents([.height(260)])
+            .presentationDetents([.medium])
             .presentationDragIndicator(.visible)
         }
         .sheet(isPresented: $showingHelp) {

@@ -70,20 +70,28 @@ struct ClipboardRowView: View {
                     Text(copied ? settings.language.s(.copyDone) : settings.language.s(.copy))
                         .font(.caption)
                         .fontWeight(.semibold)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                 }
                 .foregroundStyle(.white)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
+                .frame(minWidth: isRegularWidth ? 80 : 64)
                 .background(copied ? Color.orange : Color.teal,
                             in: RoundedRectangle(cornerRadius: 6))
                 .animation(.spring(duration: 0.2), value: copied)
             }
             .buttonStyle(.plain)
+            .layoutPriority(-1)
 
 
         }
-        .padding(.vertical, 0)
-        .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+        .listRowInsets(EdgeInsets(
+            top: isRegularWidth ? 8 : 6,
+            leading: isRegularWidth ? 24 : 16,
+            bottom: isRegularWidth ? 8 : 6,
+            trailing: isRegularWidth ? 24 : 16
+        ))
         .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
         .contextMenu {
             Button {
