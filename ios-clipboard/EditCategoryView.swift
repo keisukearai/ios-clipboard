@@ -9,6 +9,7 @@ struct EditCategoryView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(AppSettings.self) private var settings
     @Environment(ClipboardStore.self) private var store
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     let item: ClipboardItem
 
@@ -22,6 +23,7 @@ struct EditCategoryView: View {
     }
 
     private var lang: AppLanguage { settings.language }
+    private var isRegularWidth: Bool { horizontalSizeClass == .regular }
 
     private var existingCategories: [String] {
         store.categories.filter { $0 != ClipboardStore.uncategorized }
@@ -62,7 +64,8 @@ struct EditCategoryView: View {
                 Section(lang.s(.content)) {
                     ZStack(alignment: .topLeading) {
                         TextEditor(text: $content)
-                            .frame(minHeight: 80, maxHeight: 144)
+                            .frame(minHeight: isRegularWidth ? 120 : 80,
+                                   maxHeight: isRegularWidth ? 240 : 160)
                         if content.isEmpty {
                             Text(lang.s(.contentPlaceholder))
                                 .foregroundStyle(Color(.placeholderText))

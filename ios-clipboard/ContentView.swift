@@ -252,6 +252,7 @@ private struct FilterSortMenu: View {
 private struct CopiedFooterView: View {
     let copiedText: String?
     let lang: AppLanguage
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     var body: some View {
         VStack(spacing: 0) {
@@ -263,10 +264,10 @@ private struct CopiedFooterView: View {
                 Text(copiedText ?? lang.s(.noneValue))
                     .font(.caption)
                     .foregroundStyle(copiedText == nil ? .tertiary : .primary)
-                    .lineLimit(2)
+                    .lineLimit(3)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, horizontalSizeClass == .regular ? 24 : 16)
             .padding(.vertical, 6)
             .background(Color(.systemGray6))
         }
@@ -280,58 +281,68 @@ private struct PaywallSheet: View {
     let lang: AppLanguage
     let purchaseManager: PurchaseManager
     let onDismiss: () -> Void
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
+    private var isRegularWidth: Bool { horizontalSizeClass == .regular }
+    private var hPadding: CGFloat { isRegularWidth ? 64 : 32 }
 
     var body: some View {
-        VStack(spacing: 24) {
-            Spacer()
-            Image(systemName: "star.circle.fill")
-                .font(.system(size: 56))
-                .foregroundStyle(.yellow)
-            Text(lang.s(.upgradeToPro))
-                .font(.title2.bold())
-            Text(lang.s(.freeLimitMessage(freeLimit)))
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.secondary)
-                .padding(.horizontal, 32)
-            Spacer()
-            VStack(spacing: 12) {
-                Button {
-                    Task {
-                        await purchaseManager.purchase()
-                        onDismiss()
-                    }
-                } label: {
-                    Group {
-                        if purchaseManager.isPurchasing {
-                            ProgressView()
-                                .tint(.white)
-                        } else {
-                            VStack(spacing: 2) {
-                                Text(lang.s(.upgradeToPro))
-                                    .bold()
-                                if let price = purchaseManager.localizedPrice {
-                                    Text(lang.s(.priceOneTime(price)))
-                                        .font(.caption)
-                                        .opacity(0.85)
+        ScrollView {
+            VStack(spacing: 24) {
+                Spacer(minLength: 32)
+                Image(systemName: "star.circle.fill")
+                    .font(.system(size: 56))
+                    .foregroundStyle(.yellow)
+                Text(lang.s(.upgradeToPro))
+                    .font(.title2.bold())
+                    .multilineTextAlignment(.center)
+                Text(lang.s(.freeLimitMessage(freeLimit)))
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, hPadding)
+                    .fixedSize(horizontal: false, vertical: true)
+                Spacer(minLength: 32)
+                VStack(spacing: 12) {
+                    Button {
+                        Task {
+                            await purchaseManager.purchase()
+                            onDismiss()
+                        }
+                    } label: {
+                        Group {
+                            if purchaseManager.isPurchasing {
+                                ProgressView()
+                                    .tint(.white)
+                            } else {
+                                VStack(spacing: 2) {
+                                    Text(lang.s(.upgradeToPro))
+                                        .bold()
+                                    if let price = purchaseManager.localizedPrice {
+                                        Text(lang.s(.priceOneTime(price)))
+                                            .font(.caption)
+                                            .opacity(0.85)
+                                    }
                                 }
                             }
                         }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.accentColor)
+                        .foregroundStyle(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.accentColor)
-                    .foregroundStyle(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
-                }
-                .disabled(purchaseManager.isPurchasing)
-                .padding(.horizontal, 32)
+                    .disabled(purchaseManager.isPurchasing)
+                    .padding(.horizontal, hPadding)
 
-                Button(lang.s(.cancel), role: .cancel) {
-                    onDismiss()
+                    Button(lang.s(.cancel), role: .cancel) {
+                        onDismiss()
+                    }
+                    .foregroundStyle(.secondary)
                 }
-                .foregroundStyle(.secondary)
+                .padding(.bottom, 32)
             }
-            .padding(.bottom, 32)
+            .frame(maxWidth: isRegularWidth ? 540 : .infinity)
+            .frame(maxWidth: .infinity)
         }
     }
 }
@@ -340,8 +351,12 @@ private struct PaywallSheet: View {
 
 private struct ResetFinalConfirmSheet: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     let lang: AppLanguage
     let onConfirm: () -> Void
+
+    private var isRegularWidth: Bool { horizontalSizeClass == .regular }
+    private var hPadding: CGFloat { isRegularWidth ? 64 : 32 }
 
     var body: some View {
         VStack(spacing: 20) {
@@ -351,11 +366,13 @@ private struct ResetFinalConfirmSheet: View {
                 .foregroundStyle(.orange)
             Text(lang.s(.resetAllData))
                 .font(.headline)
+                .multilineTextAlignment(.center)
             Text(lang.s(.resetFinalConfirmMessage))
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, hPadding)
             Spacer()
             // キャンセルを大きく・目立つボタンにする
             Button(lang.s(.cancel)) {
@@ -367,7 +384,7 @@ private struct ResetFinalConfirmSheet: View {
             .background(Color.accentColor)
             .foregroundStyle(.white)
             .clipShape(RoundedRectangle(cornerRadius: 14))
-            .padding(.horizontal, 32)
+            .padding(.horizontal, hPadding)
             // 初期化は小さく・目立たないリンク風ボタン
             Button(lang.s(.reset)) {
                 onConfirm()

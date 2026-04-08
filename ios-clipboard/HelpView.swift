@@ -62,16 +62,19 @@ private struct HelpRow: View {
             Image(systemName: icon)
                 .font(.title3)
                 .foregroundStyle(.white)
-                .frame(width: 32, height: 32)
+                .frame(minWidth: 32, minHeight: 32)
                 .background(color, in: RoundedRectangle(cornerRadius: 7))
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(.subheadline)
                     .fontWeight(.semibold)
+                    .fixedSize(horizontal: false, vertical: true)
                 Text(desc)
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.vertical, 2)
     }

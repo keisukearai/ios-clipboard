@@ -38,11 +38,11 @@ struct ClipboardRowView: View {
             }
 
             // コピー内容（テキストボックス風）
-            // 改行をスペースに置換してリスト上で1行プレビュー表示する
+            // 改行をスペースに置換してリスト上でプレビュー表示する
             Text(item.content.replacingOccurrences(of: "\n", with: " "))
                 .font(.subheadline)
                 .foregroundStyle(.primary)
-                .lineLimit(isRegularWidth ? 2 : 1)
+                .lineLimit(isRegularWidth ? 3 : 2)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 6)
