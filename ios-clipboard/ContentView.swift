@@ -8,17 +8,13 @@ import SwiftUI
 struct ContentView: View {
     @State private var store = ClipboardStore()
     @State private var settings = AppSettings()
-    @State private var purchaseManager = PurchaseManager()
     @State private var showingAddSheet = false
     @State private var showingHelp = false
     @State private var showingUndoConfirm = false
     @State private var showingResetConfirm = false
     @State private var showingResetFinalConfirm = false
-    @State private var showingPaywall = false
-    @State private var showingPurchaseError = false
     @State private var copiedText: String? = nil
 
-    private static let freeLimit = 3
     private var lang: AppLanguage { settings.language }
 
     var body: some View {
@@ -78,32 +74,6 @@ struct ContentView: View {
         .sheet(isPresented: $showingAddSheet) {
             AddItemView().environment(store).environment(settings)
         }
-        .sheet(isPresented: $showingPaywall) {
-            PaywallSheet(
-                freeLimit: Self.freeLimit,
-                lang: lang,
-                purchaseManager: purchaseManager,
-                onDismiss: {
-                    showingPaywall = false
-                    if purchaseManager.purchaseError != nil {
-                        showingPurchaseError = true
-                    }
-                }
-            )
-            .presentationDetents([.medium])
-            .presentationDragIndicator(.visible)
-        }
-        .alert(
-            lang.s(.purchaseUnavailable),
-            isPresented: $showingPurchaseError
-        ) {
-            Button(lang.s(.ok), role: .cancel) {
-                purchaseManager.purchaseError = nil
-            }
-        } message: {
-            Text(purchaseManager.purchaseError ?? "")
-        }
-        .task { await purchaseManager.checkStatus() }
         .preferredColorScheme(settings.colorScheme)
         .environment(store)
         .environment(settings)
@@ -115,22 +85,6 @@ struct ContentView: View {
     private var leadingToolbar: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
             Menu {
-                // 購入状態
-                if purchaseManager.isPro {
-                    Label(lang.s(.proUnlimited), systemImage: "star.fill")
-                } else {
-                    Button {
-                        showingPaywall = true
-                    } label: {
-                        Label(lang.s(.upgradeToPro) + " ✦", systemImage: "star")
-                    }
-                    Button {
-                        Task { await purchaseManager.restorePurchases() }
-                    } label: {
-                        Label(lang.s(.restorePurchase), systemImage: "arrow.clockwise")
-                    }
-                }
-                Divider()
                 Button {
                     showingHelp = true
                 } label: {
@@ -184,11 +138,7 @@ struct ContentView: View {
             }
             .disabled(!store.canUndo)
             Button {
-                if !purchaseManager.isPro && store.totalCount >= Self.freeLimit {
-                    showingPaywall = true
-                } else {
-                    showingAddSheet = true
-                }
+                showingAddSheet = true
             } label: {
                 Image(systemName: "plus")
                     .tileStyle(color: .gray)
@@ -270,79 +220,6 @@ private struct CopiedFooterView: View {
             .padding(.horizontal, horizontalSizeClass == .regular ? 24 : 16)
             .padding(.vertical, 6)
             .background(Color(.systemGray6))
-        }
-    }
-}
-
-// MARK: - Paywall Sheet
-
-private struct PaywallSheet: View {
-    let freeLimit: Int
-    let lang: AppLanguage
-    let purchaseManager: PurchaseManager
-    let onDismiss: () -> Void
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-
-    private var isRegularWidth: Bool { horizontalSizeClass == .regular }
-    private var hPadding: CGFloat { isRegularWidth ? 64 : 32 }
-
-    var body: some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                Spacer(minLength: 32)
-                Image(systemName: "star.circle.fill")
-                    .font(.system(size: 56))
-                    .foregroundStyle(.yellow)
-                Text(lang.s(.upgradeToPro))
-                    .font(.title2.bold())
-                    .multilineTextAlignment(.center)
-                Text(lang.s(.freeLimitMessage(freeLimit)))
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(.secondary)
-                    .padding(.horizontal, hPadding)
-                    .fixedSize(horizontal: false, vertical: true)
-                Spacer(minLength: 32)
-                VStack(spacing: 12) {
-                    Button {
-                        Task {
-                            await purchaseManager.purchase()
-                            onDismiss()
-                        }
-                    } label: {
-                        Group {
-                            if purchaseManager.isPurchasing {
-                                ProgressView()
-                                    .tint(.white)
-                            } else {
-                                VStack(spacing: 2) {
-                                    Text(lang.s(.upgradeToPro))
-                                        .bold()
-                                    if let price = purchaseManager.localizedPrice {
-                                        Text(lang.s(.priceOneTime(price)))
-                                            .font(.caption)
-                                            .opacity(0.85)
-                                    }
-                                }
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.accentColor)
-                        .foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 14))
-                    }
-                    .disabled(purchaseManager.isPurchasing)
-                    .padding(.horizontal, hPadding)
-
-                    Button(lang.s(.cancel), role: .cancel) {
-                        onDismiss()
-                    }
-                    .foregroundStyle(.secondary)
-                }
-                .padding(.bottom, 32)
-            }
-            .frame(maxWidth: isRegularWidth ? 540 : .infinity)
-            .frame(maxWidth: .infinity)
         }
     }
 }

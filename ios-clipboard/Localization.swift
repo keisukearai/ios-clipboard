@@ -22,9 +22,6 @@ enum L {
     case resetAllData
     case resetConfirmMessage
     case resetFinalConfirmMessage
-    case proUnlimited
-    case upgradeToPro
-    case restorePurchase
     case howToUse
     case lightMode
     case darkMode
@@ -41,11 +38,6 @@ enum L {
     // MARK: Copied footer
     case copiedHeader
     case noneValue
-
-    // MARK: Paywall
-    case purchaseUnavailable
-    case freeLimitMessage(Int)
-    case priceOneTime(String)
 
     // MARK: Add / Edit item
     case newItem
@@ -183,33 +175,6 @@ enum L {
             case .vietnamese: return "Không thể hoàn tác. Chắc chắn?"
             }
 
-        case .proUnlimited:
-            switch lang {
-            case .english:    return "Pro (Unlimited)"
-            case .japanese:   return "Pro（無制限）"
-            case .thai:       return "Pro (ไม่จำกัด)"
-            case .chinese:    return "Pro（无限制）"
-            case .vietnamese: return "Pro (∞)"
-            }
-
-        case .upgradeToPro:
-            switch lang {
-            case .english:    return "Upgrade to Pro"
-            case .japanese:   return "Proにアップグレード"
-            case .thai:       return "อัปเกรด Pro"
-            case .chinese:    return "升级到 Pro"
-            case .vietnamese: return "Nâng cấp Pro"
-            }
-
-        case .restorePurchase:
-            switch lang {
-            case .english:    return "Restore Purchase"
-            case .japanese:   return "購入を復元"
-            case .thai:       return "กู้คืน"
-            case .chinese:    return "恢复购买"
-            case .vietnamese: return "Khôi phục"
-            }
-
         case .howToUse:
             switch lang {
             case .english:    return "How to Use"
@@ -316,33 +281,6 @@ enum L {
             case .thai:       return "(ว่าง)"
             case .chinese:    return "（无）"
             case .vietnamese: return "(trống)"
-            }
-
-        case .purchaseUnavailable:
-            switch lang {
-            case .english:    return "Purchase Unavailable"
-            case .japanese:   return "購入できませんでした"
-            case .thai:       return "ซื้อไม่ได้"
-            case .chinese:    return "购买失败"
-            case .vietnamese: return "Lỗi mua"
-            }
-
-        case .freeLimitMessage(let n):
-            switch lang {
-            case .english:    return "Free plan allows up to \(n) items. Upgrade to Pro for unlimited storage."
-            case .japanese:   return "無料プランは\(n)件まで保存できます。Proにアップグレードすると無制限に保存できます。"
-            case .thai:       return "ฟรีสูงสุด \(n) รายการ Pro ไม่จำกัด"
-            case .chinese:    return "免费版最多保存 \(n) 条。升级到 Pro 可无限保存。"
-            case .vietnamese: return "Miễn phí: tối đa \(n) mục. Pro = vô hạn."
-            }
-
-        case .priceOneTime(let price):
-            switch lang {
-            case .english:    return "\(price) one-time purchase"
-            case .japanese:   return "\(price) 買い切り"
-            case .thai:       return "\(price) จ่ายครั้งเดียว"
-            case .chinese:    return "\(price) 一次性购买"
-            case .vietnamese: return "\(price) 1 lần"
             }
 
         case .newItem:

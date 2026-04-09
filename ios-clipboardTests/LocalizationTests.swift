@@ -17,10 +17,10 @@ struct LocalizationTests {
         let keys: [L] = [
             .cancel, .ok, .save, .close, .delete, .add, .copy, .copyDone,
             .reset, .resetAllData, .resetConfirmMessage,
-            .proUnlimited, .upgradeToPro, .restorePurchase, .howToUse,
+            .howToUse,
             .lightMode, .darkMode, .language,
             .filter, .all, .noCategory, .sort, .sortByDate, .sortByCategory,
-            .copiedHeader, .noneValue, .purchaseUnavailable,
+            .copiedHeader, .noneValue,
             .newItem, .categoryOptional, .categoryPlaceholder,
             .content, .contentPlaceholder, .category, .editCategory,
             .actions, .copyButton, .copyButtonDesc,
@@ -35,26 +35,6 @@ struct LocalizationTests {
     }
 
     // MARK: - Parametric keys
-
-    @Test func freeLimitMessageContainsNumber() {
-        for lang in allLanguages {
-            let msg = lang.s(.freeLimitMessage(5))
-            #expect(msg.contains("5"), "freeLimitMessage missing '5' for \(lang.rawValue)")
-        }
-    }
-
-    @Test func freeLimitMessageIsNonEmpty() {
-        for lang in allLanguages {
-            #expect(!lang.s(.freeLimitMessage(3)).isEmpty)
-        }
-    }
-
-    @Test func priceOneTimeContainsPrice() {
-        for lang in allLanguages {
-            let msg = lang.s(.priceOneTime("¥120"))
-            #expect(msg.contains("¥120"), "priceOneTime missing price for \(lang.rawValue)")
-        }
-    }
 
     // MARK: - Per-language spot checks
 
