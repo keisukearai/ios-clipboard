@@ -11,6 +11,11 @@ enum AppLanguage: String, CaseIterable {
     case thai       = "th"
     case chinese    = "zh"
     case vietnamese = "vi"
+    case french     = "fr"
+    case spanish    = "es"
+    case portuguese = "pt"
+    case german     = "de"
+    case hindi      = "hi"
 
     var displayName: String {
         switch self {
@@ -19,6 +24,11 @@ enum AppLanguage: String, CaseIterable {
         case .thai:       return "ภาษาไทย"
         case .chinese:    return "中文"
         case .vietnamese: return "Tiếng Việt"
+        case .french:     return "Français"
+        case .spanish:    return "Español"
+        case .portuguese: return "Português"
+        case .german:     return "Deutsch"
+        case .hindi:      return "हिन्दी"
         }
     }
 
