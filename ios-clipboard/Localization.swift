@@ -161,7 +161,7 @@ enum L {
             case .french:     return "Copier"
             case .spanish:    return "Copiar"
             case .portuguese: return "Copiar"
-            case .german:     return "Kopieren"
+            case .german:     return "Copy"
             case .hindi:      return "कॉपी"
             }
 
@@ -539,7 +539,7 @@ enum L {
             case .french:     return "Bouton copier"
             case .spanish:    return "Botón copiar"
             case .portuguese: return "Botão copiar"
-            case .german:     return "Kopieren"
+            case .german:     return "Copy Button"
             case .hindi:      return "कॉपी बटन"
             }
 
