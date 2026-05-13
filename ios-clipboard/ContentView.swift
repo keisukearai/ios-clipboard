@@ -27,6 +27,9 @@ struct ContentView: View {
             .listStyle(.plain)
             .navigationBarTitleDisplayMode(.inline)
             .contentMargins(.top, 0, for: .scrollContent)
+            .safeAreaInset(edge: .top, spacing: 0) {
+                CategoryFilterBar(store: store, lang: lang)
+            }
             .toolbar {
                 leadingToolbar
                 trailingToolbar
@@ -131,7 +134,7 @@ struct ContentView: View {
     @ToolbarContentBuilder
     private var trailingToolbar: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
-            FilterSortMenu(store: store, lang: lang)
+            SortMenu(store: store, lang: lang)
             Button { showingUndoConfirm = true } label: {
                 Image(systemName: "arrow.counterclockwise")
                     .tileStyle(color: .gray)
@@ -147,35 +150,14 @@ struct ContentView: View {
     }
 }
 
-// MARK: - Filter + Sort Menu
+// MARK: - Sort Menu
 
-private struct FilterSortMenu: View {
+private struct SortMenu: View {
     let store: ClipboardStore
     let lang: AppLanguage
 
     var body: some View {
         Menu {
-            Section(lang.s(.filter)) {
-                Button {
-                    store.filterCategory = nil
-                } label: {
-                    HStack {
-                        Text(lang.s(.all))
-                        if store.filterCategory == nil { Image(systemName: "checkmark") }
-                    }
-                }
-                ForEach(store.categories, id: \.self) { cat in
-                    Button {
-                        store.filterCategory = cat
-                    } label: {
-                        HStack {
-                            Text(cat == ClipboardStore.uncategorized
-                                 ? lang.s(.noCategory) : cat)
-                            if store.filterCategory == cat { Image(systemName: "checkmark") }
-                        }
-                    }
-                }
-            }
             Section(lang.s(.sort)) {
                 ForEach(SortOrder.allCases, id: \.self) { order in
                     Button {
@@ -189,11 +171,75 @@ private struct FilterSortMenu: View {
                 }
             }
         } label: {
-            Image(systemName: store.filterCategory == nil
-                  ? "line.3.horizontal.decrease.circle"
-                  : "line.3.horizontal.decrease.circle.fill")
-                .tileStyle(color: store.filterCategory == nil ? .gray : .pink)
+            Image(systemName: "arrow.up.arrow.down")
+                .tileStyle(color: .gray)
         }
+    }
+}
+
+// MARK: - Category Filter Bar
+
+private struct CategoryFilterBar: View {
+    let store: ClipboardStore
+    let lang: AppLanguage
+
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                CategoryPill(
+                    label: lang.s(.all),
+                    count: store.totalCount,
+                    isSelected: store.filterCategory == nil,
+                    selectedColor: Color(.systemGray)
+                ) {
+                    store.filterCategory = nil
+                }
+                ForEach(store.categories, id: \.self) { cat in
+                    CategoryPill(
+                        label: cat == ClipboardStore.uncategorized ? lang.s(.noCategory) : cat,
+                        count: store.count(for: cat),
+                        isSelected: store.filterCategory == cat,
+                        selectedColor: store.color(for: cat)
+                    ) {
+                        store.filterCategory = cat
+                    }
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+        }
+        .background(Color(.systemBackground))
+        .overlay(alignment: .bottom) { Divider() }
+    }
+}
+
+private struct CategoryPill: View {
+    let label: String
+    let count: Int
+    let isSelected: Bool
+    let selectedColor: Color
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 4) {
+                Text(label)
+                    .font(.subheadline)
+                Text("\(count)")
+                    .font(.caption2)
+                    .monospacedDigit()
+                    .padding(.horizontal, 5)
+                    .padding(.vertical, 2)
+                    .background(isSelected ? Color.white.opacity(0.25) : Color(.systemGray4))
+                    .clipShape(Capsule())
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .background(isSelected ? selectedColor : Color(.systemGray5))
+            .foregroundStyle(isSelected ? .white : .primary)
+            .clipShape(Capsule())
+        }
+        .buttonStyle(.plain)
     }
 }
 

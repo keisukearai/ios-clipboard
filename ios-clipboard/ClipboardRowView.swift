@@ -21,20 +21,19 @@ struct ClipboardRowView: View {
         HStack(spacing: 10) {
             // カテゴリラベル
             if !item.category.isEmpty {
-                // iPad (regular) では最大8文字、iPhone (compact) では最大4文字
-                Text(String(item.category.prefix(isRegularWidth ? 8 : 4)))
+                // iPad (regular) では最大8文字、iPhone (compact) では最大5文字
+                Text(String(item.category.prefix(isRegularWidth ? 8 : 5)))
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundStyle(.white)
                     .lineLimit(1)
-                    .fixedSize()
                     .padding(.horizontal, 6)
                     .padding(.vertical, 3)
-                    .background(Color.indigo, in: RoundedRectangle(cornerRadius: 4))
-                    .frame(minWidth: 46)
+                    .background(store.color(for: item.category), in: RoundedRectangle(cornerRadius: 4))
+                    .frame(width: isRegularWidth ? 80 : 58)
                     // 固定高さを廃止: Dynamic Type 使用時にテキストが縦方向にクリップされるのを防ぐ
             } else {
-                Spacer().frame(width: 46)
+                Spacer().frame(width: isRegularWidth ? 80 : 58)
             }
 
             // コピー内容（テキストボックス風）
