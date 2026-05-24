@@ -9,3 +9,7 @@ DerivedData/
 
 # Claude Code
 .claude/
+
+# fastlane
+fastlane/.env
+vendor/

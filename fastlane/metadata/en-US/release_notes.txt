@@ -1,0 +1,2 @@
+· Now supports iOS 18 and later
+· Stability improvements
